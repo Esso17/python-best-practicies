@@ -28,54 +28,6 @@ Learn proper async/await patterns, avoid blocking the event loop, and handle CPU
 
 ---
 
-### 🚧 Error Handling & Exceptions *(Coming Soon)*
-Best practices for robust error handling, custom exceptions, and failure recovery.
-
-**What you'll learn:**
-- Exception hierarchies and custom exceptions
-- Context managers and resource cleanup
-- Retry patterns and circuit breakers
-- Logging vs exceptions
-- Error handling in async code
-
----
-
-### 🚧 Testing Best Practices *(Coming Soon)*
-Write maintainable, fast tests with proper mocking and fixtures.
-
-**What you'll learn:**
-- Unit vs integration vs end-to-end tests
-- Pytest fixtures and parametrization
-- Mocking and dependency injection
-- Testing async code
-- Test coverage strategies
-
----
-
-### 🚧 Performance Optimization *(Coming Soon)*
-Profile and optimize Python code for maximum performance.
-
-**What you'll learn:**
-- Profiling tools (`cProfile`, `line_profiler`)
-- Memory optimization
-- Generator vs list comprehensions
-- Caching strategies (`lru_cache`, `functools.cache`)
-- Database query optimization
-
----
-
-### 🚧 Security Practices *(Coming Soon)*
-Write secure Python code and avoid common vulnerabilities.
-
-**What you'll learn:**
-- Input validation and sanitization
-- SQL injection prevention
-- Secrets management
-- Secure API authentication
-- OWASP Top 10 for Python
-
----
-
 ## 🚀 Quick Start
 
 ```bash
