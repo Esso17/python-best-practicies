@@ -57,9 +57,13 @@ deactivate
 This repository focuses on:
 
 ✅ **Runnable examples** - Every example executes and demonstrates the concept
+
 ✅ **Real benchmarks** - Show actual performance differences, not just theory
+
 ✅ **Side-by-side comparisons** - ❌ BAD vs ✅ GOOD code patterns
+
 ✅ **Practical applications** - Real-world scenarios, not toy examples
+
 ✅ **Clear explanations** - Understand the "why", not just the "what"
 
 ## 🤝 Contributing
@@ -105,16 +109,6 @@ Perfect for:
 - 📊 Performance optimization
 - 🏗️ Production-ready code patterns
 
-## 📊 Example Output
-
-```
-❌ BAD: Blocking requests in async function
-   Total time: 5.23s
-
-✅ GOOD: Proper async/await with httpx
-   Total time: 1.05s
-
-SPEEDUP: 5.0x faster with async!
 ```
 
 ## 📝 License
