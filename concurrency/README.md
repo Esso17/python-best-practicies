@@ -1,295 +1,82 @@
-# Python Concurrency Best Practices with Benchmarks
+# Python Concurrency for AI Engineers
 
-Comprehensive examples demonstrating Python async/await best practices based on [The Concurrency Mistake Hiding in Your FastAPI AI Services](https://jamwithai.substack.com/p/the-concurrency-mistake-hiding-in).
+Benchmarks and visualisations accompanying the Medium article
+**"Python Concurrency for AI Engineers — What Actually Matters"**.
 
-## 🎯 Key Concepts
+## Structure
 
-### The Core Problem
-Using `async def` without understanding the contract. **Blocking operations in async functions freeze the event loop**, queuing all other requests behind them.
+```
+concurrency/
+  benchmark/           — benchmark suite (UC1–UC4 real Ollama + B1–B4 simulated)
+    config.py          — constants and sample data
+    types.py           — BenchResult dataclass + print helpers
+    ollama_client.py   — low-level HTTP helpers (chat, embed, cosine)
+    uc_ollama.py       — UC1 ticket triage · UC2 embeddings · UC3 dual-model · UC4 RAG
+    sim.py             — B1 I/O · B2 CPU · B3 real HTTP · B4 hybrid (no Ollama needed)
+    viz.py             — speedup bar chart
+    __main__.py        — CLI entry point + decision guide
 
-### I/O-Bound vs Compute-Bound
-- **I/O-bound** (async helps): External APIs, databases, file I/O
-- **Compute-bound** (async doesn't help): Local inference, embeddings, heavy calculations
+  visualize/           — publication-ready Gantt and waterfall charts (requires Ollama)
+    config.py          — Ollama config, colour palette, sample data
+    types.py           — JobSpan, StrategyResult dataclasses
+    runners.py         — instrumented runners (record per-job start/end for Gantt)
+    charts.py          — figure1_io_gantt … figure5_summary
+    __main__.py        — CLI entry point
 
-## 📚 Examples
-
-### [01_blocking_vs_async.py](01_blocking_vs_async.py)
-**What it demonstrates:**
-- ❌ Blocking `requests` library in async functions
-- ✅ Proper async HTTP with `httpx`
-- Live benchmarks showing 5x+ speedup
-
-**Key takeaway:** Never use synchronous I/O in `async def` functions.
-
-```python
-# ❌ BAD - Blocks event loop
-async def fetch_bad(url):
-    response = requests.get(url)  # Blocks!
-    return response.json()
-
-# ✅ GOOD - Yields control
-async def fetch_good(url):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        return response.json()
+  fig1_io_gantt.png    — Gantt: support ticket triage
+  fig2_cpu_gantt.png   — Gantt: CPU GIL trap
+  fig3_embed_gantt.png — Gantt: knowledge base embedding
+  fig4_rag_waterfall.png — RAG pipeline waterfall
+  fig5_summary.png     — grand summary bar chart
+  MEDIUM_ARTICLE.md    — full article source
+  requirements.txt
 ```
 
-**Run it:**
-```bash
-python 01_blocking_vs_async.py
-```
-
----
-
-### [02_compute_bound_tasks.py](02_compute_bound_tasks.py)
-**What it demonstrates:**
-- Why `async/await` doesn't help CPU-bound work
-- Why `ThreadPoolExecutor` fails (GIL)
-- ✅ Using `ProcessPoolExecutor` to bypass GIL
-- Benchmarks showing 4x+ speedup with multiple cores
-
-**Key takeaway:** CPU-bound work requires `ProcessPoolExecutor`, not async/await.
-
-```python
-from concurrent.futures import ProcessPoolExecutor
-
-executor = ProcessPoolExecutor(max_workers=4)
-
-async def compute(data):
-    loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(executor, heavy_compute, data)
-    return result
-```
-
-**Run it:**
-```bash
-python 02_compute_bound_tasks.py
-```
-
----
-
-### [03_fastapi_patterns.py](03_fastapi_patterns.py)
-**What it demonstrates:**
-- Three architectural patterns for FastAPI AI services
-- Proper model loading in `lifespan` (not endpoints)
-- Parallel guardrails with early cancellation
-- Production-ready patterns
-
-**Three Levels:**
-
-**Level 1: External APIs (I/O-bound)**
-```python
-@app.get("/generate")
-async def generate(prompt: str):
-    async with httpx.AsyncClient() as client:
-        response = await client.post("https://api.openai.com/...", ...)
-        return response.json()
-```
-
-**Level 2: Local Inference (CPU-bound)**
-```python
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Load model at startup
-    AppState.model = load_model()
-    AppState.executor = ProcessPoolExecutor(max_workers=2)
-    yield
-    AppState.executor.shutdown()
-
-@app.post("/generate")
-async def generate(prompt: str):
-    loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(AppState.executor, inference, prompt)
-    return {"response": result}
-```
-
-**Level 3: Production Scale**
-```python
-@app.post("/generate")
-async def generate(prompt: str):
-    # Externalize to vLLM/TGI/Triton
-    async with httpx.AsyncClient() as client:
-        response = await client.post("http://vllm-server:8000/...", ...)
-        return response.json()
-```
-
-**Run it:**
-```bash
-uvicorn 03_fastapi_patterns:app_level2 --reload
-```
-
----
-
-### [04_asyncio_gather_patterns.py](04_asyncio_gather_patterns.py)
-**What it demonstrates:**
-- 7 essential `asyncio.gather()` patterns
-- Error handling with `return_exceptions=True`
-- Timeouts, rate limiting, early exit
-- Benchmarks showing concurrent vs sequential execution
-
-**Patterns covered:**
-1. Basic concurrent execution
-2. Error handling strategies
-3. Dynamic task lists
-4. Mixed dependencies
-5. Timeout handling
-6. Rate limiting with Semaphore
-7. Early exit with `as_completed`
-
-**Key patterns:**
-
-```python
-# Error handling
-results = await asyncio.gather(
-    task1(), task2(), task3(),
-    return_exceptions=True  # Don't fail all on one error
-)
-
-# Rate limiting
-semaphore = asyncio.Semaphore(3)
-async def limited_task():
-    async with semaphore:
-        return await expensive_operation()
-
-# Timeout
-results = await asyncio.wait_for(
-    asyncio.gather(task1(), task2()),
-    timeout=5.0
-)
-```
-
-**Run it:**
-```bash
-python 04_asyncio_gather_patterns.py
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run individual examples
-python 01_blocking_vs_async.py
-python 02_compute_bound_tasks.py
-python 03_fastapi_patterns.py
-python 04_asyncio_gather_patterns.py
-
-# When done
-deactivate
+pip install httpx matplotlib
 ```
 
-## 📊 Expected Benchmark Results
+### Benchmark (no Ollama needed)
 
-### 01_blocking_vs_async.py
-```
-❌ BAD: Blocking requests in async function
-   Total time: 5.23s
-
-✅ GOOD: Proper async/await with httpx
-   Total time: 1.05s
-
-SPEEDUP: 5.0x faster with async!
+```bash
+cd concurrency
+python3 -m benchmark --simulate
 ```
 
-### 02_compute_bound_tasks.py
-```
-❌ BAD: CPU-bound work directly in async function
-   Total time: 8.45s
+### Benchmark (real Ollama)
 
-⚠️  STILL BAD: ThreadPoolExecutor (doesn't help CPU work)
-   Total time: 8.52s
+```bash
+ollama pull phi3.5
+ollama pull nomic-embed-text
+ollama pull mistral
 
-✅ GOOD: ProcessPoolExecutor (bypasses GIL)
-   Total time: 2.31s
-
-SPEEDUP: 3.7x faster with ProcessPoolExecutor!
+cd concurrency
+python3 -m benchmark
 ```
 
-### 04_asyncio_gather_patterns.py
-```
-❌ Sequential: 1.000s
-✅ Concurrent: 0.065s
+### Regenerate charts
 
-SPEEDUP: 15.4x faster!
-```
-
-## 🎓 Key Lessons
-
-### 1. Never Block the Event Loop
-```python
-# ❌ NEVER DO THIS
-async def endpoint():
-    response = requests.get(url)  # Blocks!
-    time.sleep(1)  # Blocks!
-    heavy_compute()  # Blocks!
+```bash
+cd concurrency
+python3 -m visualize --save
 ```
 
-### 2. Choose the Right Tool
+## Concurrency decision guide
 
-| Workload Type | Solution | Example |
-|--------------|----------|---------|
-| I/O-bound | `async/await` | HTTP calls, database queries |
-| CPU-bound | `ProcessPoolExecutor` | Local inference, embeddings |
-| Production Scale | External servers | vLLM, TGI, Triton |
+| Task | Right tool | Why |
+|------|-----------|-----|
+| LLM API calls N× (independent) | `asyncio.gather()` + `httpx.AsyncClient` | Pure I/O — event loop fires all at once |
+| LLM API calls N× (rate-limited) | `asyncio.Semaphore` + `asyncio.gather()` | Respect provider rate limits |
+| Local model inference | `ProcessPoolExecutor` + `run_in_executor()` | CPU-bound — GIL blocks threads |
+| Embed N docs via API | `asyncio.gather()` + `httpx.AsyncClient` | Same as LLM API fanout |
+| Legacy blocking library | `ThreadPoolExecutor` + `run_in_executor()` | I/O releases GIL in threads |
+| RAG pipeline | Async I/O + in-process CPU | API calls async, retrieval stays in-process |
 
-### 3. Load Models at Startup
-```python
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # ✅ Load once at startup
-    AppState.model = load_model()
-    yield
-    # Cleanup
-```
-
-### 4. Run Guardrails in Parallel
-```python
-# Start both concurrently
-safety_task = asyncio.create_task(check_safety(prompt))
-inference_task = asyncio.create_task(run_inference(prompt))
-
-if not await safety_task:
-    inference_task.cancel()  # Early cancellation
-    raise HTTPException(400, "Unsafe")
-
-return await inference_task
-```
-
-## 📖 Reference
-
-Based on the article: [The Concurrency Mistake Hiding in Your FastAPI AI Services](https://jamwithai.substack.com/p/the-concurrency-mistake-hiding-in)
-
-## 🔑 Quick Reference
-
-```python
-# I/O-bound: Use async
-async with httpx.AsyncClient() as client:
-    response = await client.get(url)
-
-# CPU-bound: Use ProcessPoolExecutor
-executor = ProcessPoolExecutor(max_workers=4)
-result = await loop.run_in_executor(executor, cpu_task, data)
-
-# Concurrent operations
-results = await asyncio.gather(task1(), task2(), task3())
-
-# Error handling
-results = await asyncio.gather(*tasks, return_exceptions=True)
-
-# Rate limiting
-semaphore = asyncio.Semaphore(10)
-async with semaphore:
-    await operation()
-
-# Timeout
-await asyncio.wait_for(operation(), timeout=5.0)
-```
-
-## 📝 License
-
-MIT
+**Golden rules**
+1. LLM API calls are I/O — use async, not threads.
+2. Local inference is CPU — use `ProcessPool`, not async.
+3. Never call `time.sleep()` or `requests.get()` inside `async def`.
+4. Create `httpx.AsyncClient` once per session, not per request.
+5. Add `asyncio.Semaphore` before going to production.
