@@ -283,5 +283,5 @@ def run_ollama(plot: bool) -> None:
                 f"KB Embedding\n(N={N_CHUNKS})",
                 "Dual-Model\nCode Review",
             ],
-            "concurrency/ollama_benchmark_results.png",
+            "concurrency/images/ollama_benchmark_results.png",
         )

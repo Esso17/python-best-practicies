@@ -23,11 +23,12 @@ concurrency/
     charts.py          — figure1_io_gantt … figure5_summary
     __main__.py        — CLI entry point
 
-  fig1_io_gantt.png    — Gantt: support ticket triage
-  fig2_cpu_gantt.png   — Gantt: CPU GIL trap
-  fig3_embed_gantt.png — Gantt: knowledge base embedding
-  fig4_rag_waterfall.png — RAG pipeline waterfall
-  fig5_summary.png     — grand summary bar chart
+  images/
+    fig1_io_gantt.png    — Gantt: support ticket triage
+    fig2_cpu_gantt.png   — Gantt: CPU GIL trap
+    fig3_embed_gantt.png — Gantt: knowledge base embedding
+    fig4_rag_waterfall.png — RAG pipeline waterfall
+    fig5_summary.png     — grand summary bar chart
   MEDIUM_ARTICLE.md    — full article source
   requirements.txt
 ```

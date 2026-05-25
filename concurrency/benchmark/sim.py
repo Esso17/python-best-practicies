@@ -258,5 +258,5 @@ def run_simulate(plot: bool) -> None:
                 "CPU-Bound\n(Math)",
                 "Real HTTP\n(JSONPlaceholder)",
             ],
-            "concurrency/simulate_benchmark_results.png",
+            "concurrency/images/simulate_benchmark_results.png",
         )

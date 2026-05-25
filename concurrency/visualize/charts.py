@@ -157,8 +157,10 @@ def figure1_io_gantt(strategies: list[StrategyResult], save: bool) -> None:
 
     plt.tight_layout(rect=[0, 0, 1, 0.93])
     if save:
-        fig.savefig("concurrency/fig1_io_gantt.png", bbox_inches="tight", dpi=150)
-        print("  Saved → concurrency/fig1_io_gantt.png")
+        fig.savefig(
+            "concurrency/images/fig1_io_gantt.png", bbox_inches="tight", dpi=150
+        )
+        print("  Saved → concurrency/images/fig1_io_gantt.png")
     else:
         plt.show()
 
@@ -193,8 +195,10 @@ def figure2_cpu_gantt(strategies: list[StrategyResult], save: bool) -> None:
 
     plt.tight_layout(rect=[0, 0, 1, 0.93])
     if save:
-        fig.savefig("concurrency/fig2_cpu_gantt.png", bbox_inches="tight", dpi=150)
-        print("  Saved → concurrency/fig2_cpu_gantt.png")
+        fig.savefig(
+            "concurrency/images/fig2_cpu_gantt.png", bbox_inches="tight", dpi=150
+        )
+        print("  Saved → concurrency/images/fig2_cpu_gantt.png")
     else:
         plt.show()
 
@@ -225,8 +229,10 @@ def figure3_embed_gantt(strategies: list[StrategyResult], save: bool) -> None:
 
     plt.tight_layout(rect=[0, 0, 1, 0.93])
     if save:
-        fig.savefig("concurrency/fig3_embed_gantt.png", bbox_inches="tight", dpi=150)
-        print("  Saved → concurrency/fig3_embed_gantt.png")
+        fig.savefig(
+            "concurrency/images/fig3_embed_gantt.png", bbox_inches="tight", dpi=150
+        )
+        print("  Saved → concurrency/images/fig3_embed_gantt.png")
     else:
         plt.show()
 
@@ -308,8 +314,10 @@ def figure4_rag_waterfall(
 
     plt.tight_layout(rect=[0, 0, 1, 0.93])
     if save:
-        fig.savefig("concurrency/fig4_rag_waterfall.png", bbox_inches="tight", dpi=150)
-        print("  Saved → concurrency/fig4_rag_waterfall.png")
+        fig.savefig(
+            "concurrency/images/fig4_rag_waterfall.png", bbox_inches="tight", dpi=150
+        )
+        print("  Saved → concurrency/images/fig4_rag_waterfall.png")
     else:
         plt.show()
 
@@ -393,7 +401,7 @@ def figure5_summary(
 
     fig.subplots_adjust(bottom=0.22, top=0.88, wspace=0.40, left=0.07, right=0.98)
     if save:
-        fig.savefig("concurrency/fig5_summary.png", bbox_inches="tight", dpi=150)
-        print("  Saved → concurrency/fig5_summary.png")
+        fig.savefig("concurrency/images/fig5_summary.png", bbox_inches="tight", dpi=150)
+        print("  Saved → concurrency/images/fig5_summary.png")
     else:
         plt.show()
