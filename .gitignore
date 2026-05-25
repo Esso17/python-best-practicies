@@ -15,6 +15,7 @@ eggs/
 *.egg
 MANIFEST
 LINKEDIN_POSTS.md
+concurrency/MEDIUM_ARTICLE.md
 
 # Virtual environments
 venv/
