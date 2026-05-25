@@ -1,7 +1,5 @@
 """All constants and sample data for the benchmark suite."""
 
-from __future__ import annotations
-
 # ── Ollama ────────────────────────────────────────────────────────────────────
 OLLAMA_BASE = "http://localhost:11434"
 GEN_MODEL = "phi3.5:3.8b"

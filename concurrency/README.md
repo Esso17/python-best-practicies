@@ -36,6 +36,7 @@ concurrency/
 ## Quick Start
 
 ```bash
+# Python 3.11+
 pip install httpx matplotlib
 ```
 

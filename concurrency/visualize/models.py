@@ -1,7 +1,5 @@
 """Data types for recording per-job timing spans."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 
 

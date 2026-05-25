@@ -1,7 +1,5 @@
 """Shared result type and print helpers."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 
 W = 76

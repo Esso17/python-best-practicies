@@ -1,7 +1,5 @@
 """Ollama use-case benchmarks: UC1 ticket triage, UC2 embeddings, UC3 dual-model, UC4 RAG."""
 
-from __future__ import annotations
-
 import asyncio
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -19,8 +17,8 @@ from .config import (
     REVIEW_MODELS,
     SUPPORT_TICKETS,
 )
+from .models import BenchResult, W, _header, _row, _sub, _summary_row, _table_header
 from .ollama_client import _chat_async, _chat_sync, _cosine, _embed_async, _embed_sync
-from .types import BenchResult, W, _header, _row, _sub, _summary_row, _table_header
 from .viz import _plot_speedup
 
 # =============================================================================

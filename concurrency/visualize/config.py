@@ -1,7 +1,5 @@
 """Constants, sample data and colour palette for the visualiser."""
 
-from __future__ import annotations
-
 OLLAMA = "http://localhost:11434"
 GEN_MODEL = "phi3.5:3.8b"
 EMBED_MODEL = "nomic-embed-text:latest"

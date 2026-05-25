@@ -1,7 +1,5 @@
 """Publication-ready chart functions (figures 1–5)."""
 
-from __future__ import annotations
-
 import matplotlib
 
 matplotlib.use("Agg")  # non-interactive backend — no display required
@@ -12,7 +10,7 @@ import matplotlib.ticker as mticker
 import numpy as np
 
 from .config import C
-from .types import StrategyResult
+from .models import StrategyResult
 
 plt.rcParams.update(
     {

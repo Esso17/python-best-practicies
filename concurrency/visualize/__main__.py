@@ -1,6 +1,7 @@
-"""Entry point: python -m visualize  or  python concurrency/07_visualize_concurrency.py"""
+"""Entry point: python -m visualize  or  python concurrency/07_visualize_concurrency.py
 
-from __future__ import annotations
+Requires Python 3.11+  |  pip install httpx matplotlib
+"""
 
 import argparse
 

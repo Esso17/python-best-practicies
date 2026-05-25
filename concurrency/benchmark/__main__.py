@@ -1,6 +1,7 @@
-"""Entry point: python -m benchmark  or  python concurrency/06_ollama_concurrency_benchmark.py"""
+"""Entry point: python -m benchmark  or  python concurrency/06_ollama_concurrency_benchmark.py
 
-from __future__ import annotations
+Requires Python 3.11+  |  pip install httpx matplotlib
+"""
 
 import argparse
 

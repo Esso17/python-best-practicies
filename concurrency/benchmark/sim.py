@@ -1,7 +1,5 @@
 """Simulated benchmarks B1–B4 — no Ollama required."""
 
-from __future__ import annotations
-
 import asyncio
 import math
 import os
@@ -19,7 +17,7 @@ from .config import (
     SEM_LIMIT,
     SIM_LATENCY_MS,
 )
-from .types import BenchResult, W, _header, _row, _summary_row, _table_header
+from .models import BenchResult, W, _header, _row, _summary_row, _table_header
 from .viz import _plot_speedup
 
 # ── Shared simulation primitives ──────────────────────────────────────────────

@@ -1,7 +1,5 @@
 """Low-level HTTP helpers for talking to a local Ollama instance."""
 
-from __future__ import annotations
-
 import math
 
 import httpx

@@ -1,7 +1,5 @@
 """Instrumented benchmark runners — record per-job start/end times for Gantt charts."""
 
-from __future__ import annotations
-
 import asyncio
 import math
 import os
@@ -12,7 +10,7 @@ from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import httpx
 
 from .config import EMBED_MODEL, GEN_MODEL, OLLAMA, TIMEOUT, C
-from .types import JobSpan, StrategyResult
+from .models import JobSpan, StrategyResult
 
 
 def _prompt(ticket: str) -> str:

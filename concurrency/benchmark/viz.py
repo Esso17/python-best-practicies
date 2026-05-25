@@ -1,8 +1,6 @@
 """Speedup bar chart for benchmark results."""
 
-from __future__ import annotations
-
-from .types import BenchResult
+from .models import BenchResult
 
 try:
     import matplotlib.pyplot as plt
